@@ -1,7 +1,4 @@
-# routing
-
-
-## deployment
+# routing deployment
 
 ### install
 
@@ -9,9 +6,9 @@
 ./routing-control install
 ```
 
-* config interfaces enp2s0 enp3s0 br0
-* add bay_routing.sevice to systemctl
-* use ststemctl to enable and start service
+* config interfaces `enp2s0`, `enp3s0`, `br0`
+* add `bay_routing.sevice` 
+* enable and start `bay_routing.sevice`
 
 ### uninstall
 
@@ -20,8 +17,8 @@
 ```
 
 * restore interfaces config
-* remove service file
-* use systemctl disbale and stop service
+* remove service config file
+* disbale and stop `bay_routing.sevice`
 
 ### start routing
 
@@ -29,22 +26,20 @@
 ./routing-control start
 ```
 
-* use ststemctl to enable and start service
-* use this after install
+* enable and start `bay_routing.sevice`
 
 ### stop routing
 ```
 ./routing-control stop
 ```
 
-* use systemctl disbale and stop service
-* use this after install
+* disbale and stop `bay_routing.sevice`
 
 ### status
 ```
 ./routing-control status
 ```
 
-* show interfaces informations
-* show iptables rules
-* show bay_routing.service status
+* display interfaces information
+* display iptables rules
+* display `bay_routing.service` status
