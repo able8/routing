@@ -9,10 +9,23 @@ blue_f='\033[36m'
 blue_e='\033[0m'
 
 FILE_EXIST=0
+FILE_NOT_EXIST=1
+DIRECTORY_EXIST=2
+DIRECTORY_NOT_EXIST=3
+FILE_EQUAL=4
+FILE_NOT_EQUAL=5
+
 declare -A RESULT
 
-RESULT[FILE_EXIST]="The file %s exist"
-RESULT[FILE_NOT_EXIST]
+RESULT[FILE_EXIST]="file exists"
+RESULT[FILE_NOT_EXIST]="file does not exists"
+RESULT[DIRECTORY_EXIST]="directory exists"
+RESULT[DIRECTORY_NOT_EXIST]="directory does not exists"
+RESULT[FILE_EQUAL]="two files are equal"
+RESULT[FILE_NOT_EQUAL]="two files are NOT equal"
+RESULT[]=""
+RESULT[]=""
+
 #parameter1 is the output of other function
 #parameter2 is the right status
 #compare if those two parameters are the same to judge if the status is right 
@@ -37,25 +50,21 @@ print_title(){
 fileExist(){
 	if [ -f $1 ]; then
 		return $FILE_EXIST
-		echo -e "file exists"
 	else 
-		echo -e "file does not exists"
+		return $FILE_NOT_EXIST
 	fi
 }
 
 #compare if two files different
 if_file_different(){
-	if [ "$#" -eq 1 ];then
-		echo " "
+	diff $1 $2 > /dev/null
+	compare_value=$?
+	if [ $compare_value -eq 0 ];then
+		return $FILE_EQUAL
 	else
-		diff $1 $2 > /dev/null
-		compare_value=$?
-		if [ $compare_value -eq 0 ];then
-			echo -e "equal"
-		else
-			echo -e "NOT equal"
- 		fi
-	fi
+		return $FILE_NOT_EQUAL
+ 	fi
+	
 }
 
 #print Specified interface's ip address and Subnet mask
