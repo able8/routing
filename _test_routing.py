@@ -96,12 +96,12 @@ def Equal( fileA,fileB ):
 
 def GetIP( interface ):
     '''get [interface] IP'''
-    IP = os.popen("ifconfig %s | grep inet | head -n -1 | awk -F ':' '{print $2}' | awk '{print $1}'" % ( interface ) ).read().replace( '\n','' )
+    IP = os.popen("ifconfig %s | grep inet | head -n 1 | awk -F ':' '{print $2}' | awk '{print $1}'" % ( interface ) ).read().replace( '\n','' )
     return IP
 
 def GetMask( interface ):
     '''get [interface] Netmask '''
-    Mask = os.popen("ifconfig %s | grep inet | head -n -1 | awk '{print $4}' | awk -F ':' '{print $2}'" % ( interface ) ).read().replace( '\n','' )
+    Mask = os.popen("ifconfig %s | grep inet |head -n 1 | awk '{print $4}' | awk -F ':' '{print $2}'" % ( interface ) ).read().replace( '\n','' )
     return Mask
 
 def GetServiceStatus( servicename ):
