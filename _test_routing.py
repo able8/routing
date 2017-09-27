@@ -1,7 +1,8 @@
 #!/usr/bin/python
 import os
 import unittest
-import sys
+import filecmp
+#import sys
 
 WAN = 'enp2s0'
 LAN = 'br0'
@@ -33,9 +34,9 @@ class test_Config_Files_and_Directories(unittest.TestCase):
         self.assertTrue( Exist( '/etc/network/if.backup' ) )
 
     def test_interfaces(self):
-        '''test whether /etc/network/interfaces exists and is equal with /home/BayRouter/Bay-Net-Client/routing/interfaces'''
+        '''test whether /etc/network/interfaces exists and is equal with /home/murka/Bay-Net-Client/routing/interfaces'''
         self.assertTrue( Exist( '/etc/network/interfaces' ) )
-        self.assertTrue( Equal( '/etc/network/interfaces', '/home/BayRouter/Bay-Net-Client/routing/interfaces' ) )
+        self.assertTrue( Equal( '/etc/network/interfaces', '/home/murka/Bay-Net-Client/routing/interfaces' ) )
     
     def test_routing_dir(self):    
         '''test /etc/routing directory exists'''
@@ -44,12 +45,12 @@ class test_Config_Files_and_Directories(unittest.TestCase):
     def test_routing_sh(self):
         '''test whether /etc/routing/routing.sh exists and is equal with ~/Bay-Net-Client/routing/routing.sh'''
         self.assertTrue( Exist( '/etc/routing/routing.sh' ) )
-        self.assertTrue( Equal( '/etc/routing/routing.sh', '/home/BayRouter/Bay-Net-Client/routing/routing.sh' ) )
+        self.assertTrue( Equal( '/etc/routing/routing.sh', '/home/murka/Bay-Net-Client/routing/routing.sh' ) )
 
     def test_bay_routing_service(self):
         '''test whether /etc/systemd/system/bay_routing.service exists and is equal with ~/Bay-Net-Client/routing/bay_routing.service'''
         self.assertTrue( Exist( '/etc/systemd/system/bay_routing.service' ) )
-        self.assertTrue( Equal( '/etc/systemd/system/bay_routing.service', '/home/BayRouter/Bay-Net-Client/routing/bay_routing.service' ) )
+        self.assertTrue( Equal( '/etc/systemd/system/bay_routing.service', '/home/murka/Bay-Net-Client/routing/bay_routing.service' ) )
 
 class test_Interfaces_Information( unittest.TestCase ):
     '''test interfaces '''
@@ -72,13 +73,13 @@ class test_Interfaces_Information( unittest.TestCase ):
 class test_service( unittest.TestCase ):
     def test_service_is_active( self ):
         '''test whether bay_routing.service is active'''    
-        self.assertTrue( Match( GetserviceStatus( 'bay_routing.service' ), 'active' ) )    
+        self.assertTrue( Match( GetServiceStatus( 'bay_routing.service' ), 'active' ) )    
 
 class test_Iptables( unittest.TestCase ):
     '''test whether iptables rules exist'''
     def test_nat_POSTROUTING_MASQUERADE( self ):
         '''test whether MASQUERADE rules exist'''
-        self.assertTrue( Match( GetIptableRule( 'nat', 'POSTROUTING', WAN  ), 'MASQUERADE*%d' % ( WAN ) ) )
+        self.assertTrue( Match( GetIptableRule( 'nat', 'POSTROUTING', WAN  ), 'MASQUERADE*%s' % ( WAN ) ) )
 
     def test_filter_FORWARD( self ):
         '''test whether LAN and WAN data can exchange'''
@@ -87,18 +88,18 @@ class test_Iptables( unittest.TestCase ):
 
 def Exist( name ):
     '''test whether [name](file or directory) exist'''
-    os.path.exist( name )
+    return os.path.exists( name )
 
 def Equal( fileA,fileB ):
     '''test whether [fileA] and [fileB] are equal'''
-    filecmp.cmp( fileA, fileB )
+    return filecmp.cmp( fileA, fileB )
 
 def GetIP( interface ):
     '''get [interface] IP'''
     IP = os.popen("ifconfig %s | grep inet | head -n -1 | awk -F ':' '{print $2}' | awk '{print $1}'" % ( interface ) ).read().replace( '\n','' )
     return IP
 
-def GetMask( interfaces ):
+def GetMask( interface ):
     '''get [interface] Netmask '''
     Mask = os.popen("ifconfig %s | grep inet | head -n -1 | awk '{print $4}' | awk -F ':' '{print $2}'" % ( interface ) ).read().replace( '\n','' )
     return Mask
@@ -121,7 +122,7 @@ def Match( code, correct ):
         return False
 
 if __name__ == '__main__':
-    unittest.main
+    unittest.main()
 
 
 
