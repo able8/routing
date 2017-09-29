@@ -31,26 +31,26 @@ class test_Config_Files_and_Directories(unittest.TestCase):
     '''test whether config files and directories exist or equal'''
     def test_if_backup(self):
         '''test whether if.backup exists'''
-        self.assertTrue( Exist( '/etc/network/if.backup' ) )
+        self.assertFalse( Exist( '/etc/network/if.backup' ) )
 
     def test_interfaces(self):
         '''test whether /etc/network/interfaces exists and is equal with /home/murka/Bay-Net-Client/routing/interfaces'''
         self.assertTrue( Exist( '/etc/network/interfaces' ) )
-        self.assertTrue( Equal( '/etc/network/interfaces', '/home/murka/Bay-Net-Client/routing/interfaces' ) )
+        self.assertFalse( Equal( '/etc/network/interfaces', '/home/murka/Bay-Net-Client/routing/interfaces' ) )
     
     def test_routing_dir(self):    
         '''test /etc/routing directory exists'''
-        self.assertTrue( Exist( '/etc/routing' ) )
+        self.assertFalse( Exist( '/etc/routing' ) )
     
     def test_routing_sh(self):
         '''test whether /etc/routing/routing.sh exists and is equal with ~/Bay-Net-Client/routing/routing.sh'''
-        self.assertTrue( Exist( '/etc/routing/routing.sh' ) )
-        self.assertTrue( Equal( '/etc/routing/routing.sh', '/home/murka/Bay-Net-Client/routing/routing.sh' ) )
+        self.assertFalse( Exist( '/etc/routing/routing.sh' ) )
+        self.assertFalse( Equal( '/etc/routing/routing.sh', '/home/murka/Bay-Net-Client/routing/routing.sh' ) )
 
     def test_bay_routing_service(self):
         '''test whether /etc/systemd/system/bay_routing.service exists and is equal with ~/Bay-Net-Client/routing/bay_routing.service'''
-        self.assertTrue( Exist( '/etc/systemd/system/bay_routing.service' ) )
-        self.assertTrue( Equal( '/etc/systemd/system/bay_routing.service', '/home/murka/Bay-Net-Client/routing/bay_routing.service' ) )
+        self.assertFalse( Exist( '/etc/systemd/system/bay_routing.service' ) )
+        self.assertFalse( Equal( '/etc/systemd/system/bay_routing.service', '/home/murka/Bay-Net-Client/routing/bay_routing.service' ) )
 
 class test_Interfaces_Information( unittest.TestCase ):
     '''test interfaces '''
@@ -64,26 +64,26 @@ class test_Interfaces_Information( unittest.TestCase ):
 
     def test_LAN_IP( self ):
         '''test whether LAN IP is 192.168.0.1'''
-        self.assertTrue( Match( GetIP( LAN ), '192.168.0.1' ) )
+        self.assertFalse( Match( GetIP( LAN ), '192.168.0.1' ) )
 
     def test_LAN_natmask( self ):
         '''test whether LAN netmask is 255.255.254.0'''
-        self.assertTrue( Match( GetMask( LAN ), '255.255.254.0' ) )
+        self.assertFalse( Match( GetMask( LAN ), '255.255.254.0' ) )
 
 class test_service( unittest.TestCase ):
     def test_service_is_active( self ):
         '''test whether bay_routing.service is active'''    
-        self.assertTrue( Match( GetServiceStatus( 'bay_routing.service' ), 'active' ) )    
+        self.assertFalse( Match( GetServiceStatus( 'bay_routing.service' ), 'active' ) )    
 
 class test_Iptables( unittest.TestCase ):
     '''test whether iptables rules exist'''
     def test_nat_POSTROUTING_MASQUERADE( self ):
         '''test whether MASQUERADE rules exist'''
-        self.assertTrue( Match( GetIptableRule( 'nat', 'POSTROUTING', WAN  ), 'MASQUERADE*%s' % ( WAN ) ) )
+        self.assertFalse( Match( GetIptableRule( 'nat', 'POSTROUTING', WAN  ), 'MASQUERADE*%s' % ( WAN ) ) )
 
     def test_filter_FORWARD( self ):
         '''test whether LAN and WAN data can exchange'''
-        self.assertTrue( Match( GetIptableRule( 'filter', 'FORWARD', WAN ), 'ACCEPT%s%sACCEPT%s%s' % ( WAN, LAN, LAN, WAN ) ) )
+        self.assertFalse( Match( GetIptableRule( 'filter', 'FORWARD', WAN ), 'ACCEPT%s%sACCEPT%s%s' % ( WAN, LAN, LAN, WAN ) ) )
 
 
 def Exist( name ):
