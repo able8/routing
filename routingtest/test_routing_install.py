@@ -56,7 +56,7 @@ class test_Interfaces_Information( unittest.TestCase ):
     '''test interfaces '''
     def test_WAN_IP( self ):
         '''test whether WAN IP is 192.168.xxx.xxx'''
-#    self.assertTrue( Match( GetIP( WAN ), 192.168.[0-9] ) )
+        self.assertTrue( Match( GetIP( WAN )[0:7], '192.168' ) )
 
     def test_WAN_netmask( self ):
         '''test whether WAN netmask is 255.255.255.0'''
